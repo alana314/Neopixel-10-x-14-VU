@@ -11,8 +11,6 @@ FFT for 14 x 10 neopixels snaked up and down
 #define PIN 6
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-unsigned long delaytime=20;
-
 int audioPin = A0;
 char im[128], data[128], data_avgs[14]; //FFt variables
 int i, j;
@@ -58,13 +56,13 @@ void loop() {
   for (i = 0; i < 14; i++) {
     // Average values
     data_avgs[i] = (data[i*4] + data[i*4 + 1] + data[i*4 + 2] + data[i*4 + 3]);   // average together
-    //if (i == 0)
-      //data_avgs[i] >>= 1;  // KK: De-emphasize first audio band (too sensitive)
-    data_avgs[i] = map(data_avgs[i], 0, sensitivity, 0, 9);   
+    if (i == 0)
+      data_avgs[i] >>= 1;  // KK: De-emphasize first audio band (too sensitive)
+    data_avgs[i] = map(data_avgs[i], 0, sensitivity, 0, 10);
   }
     for(int x = 0; x < 14; x++) //rows
     {
-      for(int y = 0; y < 9; y++) //cols
+      for(int y = 0; y < 10; y++) //cols
       {
         //int z = x * 2;
         if(y < data_avgs[13-x])
@@ -76,12 +74,12 @@ void loop() {
           }
           else if(y < 5) //lavender
           {
-            strip.setPixelColor(jcol[x][y], 255 * brightness / 100, 230 * brightness / 100, 250 * brightness / 100);
+            strip.setPixelColor(jcol[x][y], 132 * brightness / 100, 20 * brightness / 100, 120 * brightness / 100);
             //strip.setPixelColor(jcol[z-1][y], 255 * brightness / 100, 230 * brightness / 100, 250 * brightness / 100);            
           }
           else if(y < 8) //pink
           {
-            strip.setPixelColor(jcol[x][y], 255 * brightness / 100, 105 * brightness / 100, 180 * brightness / 100);
+            strip.setPixelColor(jcol[x][y], 255 * brightness / 100, 200 * brightness / 100, 230 * brightness / 100);
             //strip.setPixelColor(jcol[z-1][y], 255 * brightness / 100, 105 * brightness / 100, 180 * brightness / 100);            
           }
           else //red
@@ -99,5 +97,5 @@ void loop() {
     }
     
     strip.show();
-    //delay(delaytime);  
+    delay(20);
 }
