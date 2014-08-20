@@ -97,5 +97,5 @@ void loop() {
     }
     
     strip.show();
-    delay(20);
+    //delay(20);
 }
